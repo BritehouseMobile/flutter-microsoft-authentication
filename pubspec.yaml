@@ -1,8 +1,8 @@
 name: flutter_microsoft_authentication
 description: Flutter Wrapper for Microsoft Authentication Library
 version: 0.0.1
-author:
-homepage:
+author: Gerrit van Huyssteen <gerrit.vanhuyssteen@britehouse.co.za>
+homepage: https://github.com/BritehouseMobile/flutter-microsoft-authentication
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
