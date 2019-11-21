@@ -1,0 +1,31 @@
+PODS:
+  - Flutter (1.0.0)
+  - flutter_microsoft_authentication (0.0.1):
+    - Flutter
+    - MSAL (~> 1.0.3)
+  - MSAL (1.0.3):
+    - MSAL/app-lib (= 1.0.3)
+  - MSAL/app-lib (1.0.3)
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios`)
+  - flutter_microsoft_authentication (from `.symlinks/plugins/flutter_microsoft_authentication/ios`)
+
+SPEC REPOS:
+  trunk:
+    - MSAL
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+  flutter_microsoft_authentication:
+    :path: ".symlinks/plugins/flutter_microsoft_authentication/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_microsoft_authentication: 0ac5448e5dad7ac72028dd6004bf70f2c897fd4e
+  MSAL: 351711995bd31170a2e887941115a3ed17b178e8
+
+PODFILE CHECKSUM: 2c78efac486a5a4c55cbdb75659105e9a24d1328
+
+COCOAPODS: 1.8.4
