@@ -39,8 +39,9 @@ class _MyAppState extends State<MyApp> {
     String authToken;
     try {
       authToken = await this.fma.acquireTokenInteractively;
-    } on PlatformException {
+    } on PlatformException catch(e) {
       authToken = 'Failed to get token.';
+      print(e.message);
     }
     setState(() {
       _authToken = authToken;
@@ -51,8 +52,9 @@ class _MyAppState extends State<MyApp> {
     String authToken;
     try {
       authToken = await this.fma.acquireTokenSilently;
-    } on PlatformException {
+    } on PlatformException catch(e) {
       authToken = 'Failed to get token silently.';
+      print(e.message);
     }
     setState(() {
       _authToken = authToken;
@@ -63,8 +65,9 @@ class _MyAppState extends State<MyApp> {
     String authToken;
     try {
       authToken = await this.fma.signOut;
-    } on PlatformException {
+    } on PlatformException catch(e) {
       authToken = 'Failed to sign out.';
+      print(e.message);
     }
     setState(() {
       _authToken = authToken;

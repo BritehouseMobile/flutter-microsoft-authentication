@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_microsoft_authentication (0.0.1):
+  - flutter_microsoft_authentication (0.0.2):
     - Flutter
     - MSAL (~> 1.0.3)
   - MSAL (1.0.3):
@@ -23,7 +23,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_microsoft_authentication: 0ac5448e5dad7ac72028dd6004bf70f2c897fd4e
+  flutter_microsoft_authentication: e9b45e75133dec2ba33be351a6edfb452def3bdc
   MSAL: 351711995bd31170a2e887941115a3ed17b178e8
 
 PODFILE CHECKSUM: 2c78efac486a5a4c55cbdb75659105e9a24d1328
