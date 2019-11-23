@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Fixed dismiss error message on Android
+
 ## 0.0.3
 
 * Added error response messages to iOS

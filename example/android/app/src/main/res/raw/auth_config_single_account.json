@@ -12,6 +12,6 @@
         "type": "AzureADandPersonalMicrosoftAccount",
         "tenant_id": "common"
       }
-    }s
+    }
   ]
 }

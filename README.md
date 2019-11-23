@@ -29,7 +29,7 @@ Import the [Flutter Microsoft Authentication package](https://pub.dev/packages/f
 
 ```
 dependencies:
-  flutter_microsoft_authentication: ^0.0.3
+  flutter_microsoft_authentication: ^0.0.4
 ```
 
 ### Configuring MSAL for Android
@@ -51,7 +51,7 @@ dependencies:
         <category android:name="android.intent.category.BROWSABLE" />
         <data
             android:host="[HOST]"
-            android:path="[PATH]"
+            android:path="/[Signature Hash]"
             android:scheme="msauth" />
     </intent-filter>
 </activity>
@@ -71,7 +71,7 @@ dependencies:
       "type": "<type>",
       "audience": {
         "type": "<type>",
-        "tenant_id": "<type>"
+        "tenant_id": "<tenant id>"
       }
     }
   ]
