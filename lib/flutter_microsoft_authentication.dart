@@ -31,13 +31,17 @@ class FlutterMicrosoftAuthentication {
 
   Future<String> get acquireTokenInteractively async {
     final String token = await _channel.invokeMethod('acquireTokenInteractively', _createMethodcallArguments());
-    print('GOT TOKEN: $token');
     return token;
   }
 
   Future<String> get acquireTokenSilently async {
     final String token = await _channel.invokeMethod('acquireTokenSilently', _createMethodcallArguments());
     return token;
+  }
+
+  Future<String> get loadAccount async {
+    final result = await _channel.invokeMethod('loadAccount', _createMethodcallArguments());
+    return result;
   }
 
   Future<String> get signOut async {

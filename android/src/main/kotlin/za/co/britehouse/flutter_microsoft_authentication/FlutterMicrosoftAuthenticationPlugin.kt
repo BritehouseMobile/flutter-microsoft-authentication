@@ -13,6 +13,8 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
+import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.json
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -70,7 +72,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
     createSingleAccountPublicClientApplication(configPath)
 
     when(call.method){
-      "acquireTokenInteractively" -> acquireTokenInteractively(scopes, result)
+      "acquireTokenInteractively" -> acquireTokenInteractively(scopes, authority, result)
       "acquireTokenSilently" -> acquireTokenSilently(scopes, authority, result)
       "loadAccount" -> loadAccount(result)
       else -> result.notImplemented()
@@ -110,11 +112,8 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
   }
 
   private fun createSingleAccountPublicClientApplication(assetPath: String) {
-    Log.d(TAG, assetPath)
     val configFile = getConfigFile(assetPath)
     val context: Context = mainActivity.applicationContext
-
-    Log.d(TAG, configFile.absolutePath)
 
     PublicClientApplication.createSingleAccountPublicClientApplication(
             context,
@@ -135,7 +134,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
             })
   }
 
-  private fun acquireTokenInteractively(scopes: Array<String>, result: Result) {
+  private fun acquireTokenInteractively(scopes: Array<String>, authority: String, result: Result) {
     return mSingleAccountApp!!.signIn(mainActivity, "", scopes, getAuthInteractiveCallback(result))
   }
 
@@ -150,15 +149,14 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       }
 
       override fun onError(exception: MsalException) {
-        result.error("ERROR", exception.message, null)
+        result.error("ERROR", exception.errorCode, null)
       }
     })
 
   }
 
-
-
   private fun getAuthInteractiveCallback(result: Result): AuthenticationCallback {
+
     return object : AuthenticationCallback {
 
       override fun onSuccess(authenticationResult: IAuthenticationResult) {
@@ -171,15 +169,19 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
 
       override fun onError(exception: MsalException) {
         /* Failed to acquireToken */
-        Log.d(TAG, "Authentication failed: ${exception.localizedMessage}")
+
+        Log.d(TAG, "Authentication failed: ${exception.errorCode}")
 
         if (exception is MsalClientException) {
           /* Exception inside MSAL, more info inside MsalError.java */
-          result.error("MsalClientException",exception.message, null)
+          Log.d(TAG, "Authentication failed: MsalClientException")
+          result.error("MsalClientException",exception.errorCode, null)
+          throw exception
 
         } else if (exception is MsalServiceException) {
           /* Exception when communicating with the STS, likely config issue */
-          result.error("MsalServiceException",exception.message, null)
+          Log.d(TAG, "Authentication failed: MsalServiceException")
+          result.error("MsalServiceException",exception.errorCode, null)
         }
       }
 
@@ -228,19 +230,18 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
   }
 
   private fun loadAccount(result: Result) {
-    if (mSingleAccountApp == null) {
-      return
-    }
-
-    mSingleAccountApp!!.getCurrentAccountAsync(object :
+    return mSingleAccountApp!!.getCurrentAccountAsync(object :
             ISingleAccountPublicClientApplication.CurrentAccountCallback {
       override fun onAccountLoaded(activeAccount: IAccount?) {
+        if (activeAccount != null) {
+          result.success(activeAccount.username)
+        }
       }
 
       override fun onAccountChanged(priorAccount: IAccount?, currentAccount: IAccount?) {
         if (currentAccount == null) {
           // Perform a cleanup task as the signed-in account changed.
-          signOut(result)
+          Log.d(TAG, "No Account")
         }
       }
 
