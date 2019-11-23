@@ -141,9 +141,5 @@ https://github.com/AzureAD/microsoft-authentication-library-for-objc
   }
 ```
 
-6) Update Podfile to new target
-- Change the platform target to:
-```
-platform :ios, '11.0'
-```
-- Run `pod install`
+6) Ensure that the minimum target is set to iOS 11
+- In Xcode, under General > Deployment info > Set the target to be no less than iOS 11
