@@ -13,8 +13,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import kotlinx.serialization.json.JSON
-import kotlinx.serialization.json.json
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -94,16 +92,15 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       val inputStream = assetManager.open(key)
       val outputStream = FileOutputStream(configFile)
       try {
+        Log.d(TAG, "File exists: ${configFile.exists()}")
         if (configFile.exists()) {
           outputStream.write("".toByteArray())
         }
-
         inputStream.copyTo(outputStream)
       } finally {
         inputStream.close()
         outputStream.close()
       }
-
       return  configFile
 
     } catch (e: IOException) {
@@ -176,7 +173,6 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
           /* Exception inside MSAL, more info inside MsalError.java */
           Log.d(TAG, "Authentication failed: MsalClientException")
           result.error("MsalClientException",exception.errorCode, null)
-          throw exception
 
         } else if (exception is MsalServiceException) {
           /* Exception when communicating with the STS, likely config issue */
@@ -188,6 +184,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       override fun onCancel() {
         /* User canceled the authentication */
         Log.d(TAG, "User cancelled login.")
+        result.error("MsalUserCancel", "User cancelled login.", null)
       }
     }
   }
