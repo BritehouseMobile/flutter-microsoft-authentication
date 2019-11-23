@@ -21,7 +21,7 @@ public class SwiftFlutterMicrosoftAuthenticationPlugin: NSObject, FlutterPlugin 
     let authority = dict["kAuthority"] as! String
 
     let msalView = ViewController()
-    msalView.onInit(clientId: clientId, scopes: scopes, authority: authority)
+    msalView.onInit(clientId: clientId, scopes: scopes, authority: authority, flutterResult: result)
 
     if(call.method == "acquireTokenInteractively") {
         msalView.acquireTokenInteractively(flutterResult: result)
@@ -46,14 +46,15 @@ private class ViewController: UIViewController, UITextFieldDelegate, URLSessionD
     var applicationContext : MSALPublicClientApplication?
     var webViewParamaters : MSALWebviewParameters?
 
-    public func onInit(clientId: String, scopes: [String], authority: String) {
+    public func onInit(clientId: String, scopes: [String], authority: String, flutterResult: @escaping FlutterResult) {
         self.kClientID = clientId
         self.kScopes = scopes
         self.kAuthority = authority
         do {
-            try self.initMSAL()
+            try self.initMSAL(flutterResult: flutterResult)
         } catch let error {
             print("Unable to create Application Context \(error)")
+            flutterResult(FlutterError(code: "CONFIG_ERROR", message: "Unable to create MSALPublicClientApplication", details: nil))
         }
     }
 }
@@ -79,10 +80,11 @@ extension ViewController {
      - error                The error that occurred creating the application object, if any, if you're
      not interested in the specific error pass in nil.
      */
-    func initMSAL() throws {
+    func initMSAL(flutterResult: @escaping FlutterResult) throws {
 
         guard let authorityURL = URL(string: kAuthority) else {
             print("Unable to create authority URL")
+            flutterResult(FlutterError(code: "INVALID_AUTHORITY", message: "Unable to create authority URL", details: nil))
             return
         }
 
@@ -113,13 +115,13 @@ extension ViewController {
         applicationContext.acquireToken(with: parameters) { (result, error) in
 
             if let error = error {
-
+                flutterResult(FlutterError(code: "AUTH_ERROR", message: "Could not acquire token", details: nil))
                 print("Could not acquire token: \(error)")
                 return
             }
 
             guard let result = result else {
-
+                flutterResult(FlutterError(code: "AUTH_ERROR", message: "Could not acquire token: No result returned", details: nil))
                 print("Could not acquire token: No result returned")
                 return
             }
@@ -148,7 +150,7 @@ extension ViewController {
          flow completes, or encounters an error.
          */
 
-        let currentAccount = self.currentAccount();
+        let currentAccount = self.currentAccount(flutterResult: flutterResult);
 
         if(currentAccount == nil) {
             DispatchQueue.main.async {
@@ -185,7 +187,7 @@ extension ViewController {
             }
 
             guard let result = result else {
-
+                flutterResult(FlutterError(code: "AUTH_ERROR", message: "Could not acquire token: No result returned", details: nil))
                 print("Could not acquire token: No result returned")
                 return
             }
@@ -203,7 +205,7 @@ extension ViewController {
 // MARK: Get account and removing cache
 
 extension ViewController {
-    func currentAccount() -> MSALAccount? {
+    func currentAccount(flutterResult: @escaping FlutterResult) -> MSALAccount? {
 
         guard let applicationContext = self.applicationContext else { return nil }
 
@@ -219,7 +221,7 @@ extension ViewController {
             }
 
         } catch let error as NSError {
-
+            flutterResult(FlutterError(code: "NO_ACCOUNT",  message: "Didn't find any accounts in cache", details: nil))
             print("Didn't find any accounts in cache: \(error)")
         }
 
@@ -234,7 +236,7 @@ extension ViewController {
 
         guard let applicationContext = self.applicationContext else { return }
 
-        guard let account = self.currentAccount() else { return }
+        guard let account = self.currentAccount(flutterResult: flutterResult) else { return }
 
         do {
 
@@ -251,7 +253,7 @@ extension ViewController {
             flutterResult(self.accessToken)
 
         } catch let error as NSError {
-
+            flutterResult(FlutterError(code: "SIGN_OUT",  message: "Received error signing account out", details: nil))
             print("Received error signing account out: \(error)")
         }
     }
