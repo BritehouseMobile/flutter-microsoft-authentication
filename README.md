@@ -29,7 +29,7 @@ Import the [Flutter Microsoft Authentication package](https://pub.dev/packages/f
 
 ```
 dependencies:
-  flutter_microsoft_authentication: ^0.0.2
+  flutter_microsoft_authentication: ^0.0.3
 ```
 
 ### Configuring MSAL for Android
