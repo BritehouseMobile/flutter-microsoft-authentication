@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import 'package:flutter/services.dart';
 import 'package:flutter_microsoft_authentication/flutter_microsoft_authentication.dart';
 
@@ -29,7 +28,8 @@ class _MyAppState extends State<MyApp> {
     fma = FlutterMicrosoftAuthentication(
       kClientID: "<client-id>",
       kAuthority: "https://login.microsoftonline.com/organizations",
-      kScopes: ["User.Read", "User.ReadBasic.All"]
+      kScopes: ["User.Read", "User.ReadBasic.All"],
+      androidConfigAssetPath: "assets/android_auth_config.json"
     );
   }
 
