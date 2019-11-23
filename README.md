@@ -136,7 +136,7 @@ https://github.com/AzureAD/microsoft-authentication-library-for-objc
 - Within your AppDelegate.swift file add the following method
 
 ```swift
-  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+  override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     return MSALPublicClientApplication.handleMSALResponse(url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String)
   }
 ```
