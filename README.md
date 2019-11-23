@@ -6,7 +6,8 @@ import 'package:flutter_microsoft_authentication/flutter_microsoft_authenticatio
 FlutterMicrosoftAuthentication fma = FlutterMicrosoftAuthentication(
   kClientID: "<client-id>",
   kAuthority: "https://login.microsoftonline.com/organizations",
-  kScopes: ["User.Read", "User.ReadBasic.All"]
+  kScopes: ["User.Read", "User.ReadBasic.All"],
+  androidConfigAssetPath: "assets/auth_config.json" // Android MSAL Config file
 );
 
 // Sign in interactively
@@ -17,6 +18,70 @@ String authToken = await this.fma.acquireTokenSilently;
 
 // Sign out
 await this.fma.signOut;
+
+// Android load account username
+await this.fma.loadAccount;
+```
+
+### Flutter
+
+Import the [Flutter Microsoft Authentication package](https://pub.dev/packages/flutter_microsoft_authentication/) into your flutter application by adding it to the list of dependencies in your pubsec.yaml file.
+
+```
+dependencies:
+  flutter_microsoft_authentication: ^0.0.2
+```
+
+### Configuring MSAL for Android
+
+| [Getting Started](https://docs.microsoft.com/azure/active-directory/develop/guidedsetups/active-directory-android)| [Library](https://github.com/AzureAD/microsoft-authentication-library-for-android) | [API Reference](http://javadoc.io/doc/com.microsoft.identity.client/msal) | [Support](README.md#community-help-and-support)
+| --- | --- | --- | --- |
+
+1) Register your app
+- Create App Registration in Azure Portal
+- In Authentication, add Android platform and fill in your bundle id
+- Make note of the MSAL Configuration
+
+2) Add BrowserTabActivity with RedirectUri to Android Manifest.xml
+```xml
+<activity android:name="com.microsoft.identity.client.BrowserTabActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data
+            android:host="[HOST]"
+            android:path="[PATH]"
+            android:scheme="msauth" />
+    </intent-filter>
+</activity>
+```
+
+3) Create Msal Configuration JSON file
+```json
+{
+  "client_id": "<client id>",
+  "authorization_user_agent": "DEFAULT",
+  "redirect_uri": "<redirect uri>",
+  "account_mode": "SINGLE",
+  "broker_redirect_uri_registered": true,
+  "shared_device_mode_supported": true,
+  "authorities": [
+    {
+      "type": "<type>",
+      "audience": {
+        "type": "<type>",
+        "tenant_id": "<type>"
+      }
+    }
+  ]
+}
+```
+
+4) Add android MSAL config file to pubspec.yaml assets
+```
+assets
+    - assets/auth_config.json
 ```
 
 ### Configuring MSAL for iOS
