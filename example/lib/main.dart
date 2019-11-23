@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:flutter_microsoft_authentication/flutter_microsoft_authentication.dart';
@@ -109,10 +110,12 @@ class _MyAppState extends State<MyApp> {
                     child: Text('Sign Out')),
                 RaisedButton( onPressed: _fetchMicrosoftProfile,
                     child: Text('Fetch Profile')),
-                RaisedButton( onPressed: _loadAccount,
-                    child: Text('Load account')),
+                if (Platform.isAndroid == true)
+                  RaisedButton( onPressed: _loadAccount,
+                      child: Text('Load account')),
                 SizedBox(height: 8,),
-                Text( "Username: $_username"),
+                if (Platform.isAndroid == true)
+                  Text( "Username: $_username"),
                 SizedBox(height: 8,),
                 Text( "Profile: $_msProfile"),
                 SizedBox(height: 8,),
