@@ -37,24 +37,28 @@ class FlutterMicrosoftAuthentication {
     return res;
   }
 
+  /// Acquire auth token with interactive flow.
   Future<String> get acquireTokenInteractively async {
     final String token = await _channel.invokeMethod(
         'acquireTokenInteractively', _createMethodcallArguments());
     return token;
   }
 
+  /// Acquire auth token silently.
   Future<String> get acquireTokenSilently async {
     final String token = await _channel.invokeMethod(
         'acquireTokenSilently', _createMethodcallArguments());
     return token;
   }
 
+  /// Android only. Get username of current active account.
   Future<String> get loadAccount async {
     final result = await _channel.invokeMethod(
         'loadAccount', _createMethodcallArguments());
     return result;
   }
 
+  /// Sign out of current active account.
   Future<String> get signOut async {
     final String token =
         await _channel.invokeMethod('signOut', _createMethodcallArguments());

@@ -1,6 +1,12 @@
+## 0.1.0
+
+* Fixed issue on error where plugin would not initialise properly on first method call
+
+
 ## 0.0.4
 
 * Fixed dismiss error message on Android
+
 
 ## 0.0.3
 
