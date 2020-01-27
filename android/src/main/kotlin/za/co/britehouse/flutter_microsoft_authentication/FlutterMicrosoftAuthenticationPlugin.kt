@@ -38,11 +38,6 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
 
   override fun onMethodCall(call: MethodCall, result: Result) {
 
-    if (call.method == "signOut") {
-      signOut(result)
-      return
-    }
-
     val scopesArg : ArrayList<String>? = call.argument("kScopes")
     val scopes: Array<String>? = scopesArg?.toTypedArray()
     val authority: String? = call.argument("kAuthority")
@@ -67,12 +62,12 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       return
     }
 
-    createSingleAccountPublicClientApplication(configPath)
-
     when(call.method){
       "acquireTokenInteractively" -> acquireTokenInteractively(scopes, authority, result)
       "acquireTokenSilently" -> acquireTokenSilently(scopes, authority, result)
       "loadAccount" -> loadAccount(result)
+      "signOut" -> signOut(result)
+      "init" -> initPlugin(configPath)
       else -> result.notImplemented()
     }
 
@@ -108,6 +103,10 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
     }
   }
 
+  private fun initPlugin(assetPath: String) {
+    createSingleAccountPublicClientApplication(assetPath)
+  }
+
   private fun createSingleAccountPublicClientApplication(assetPath: String) {
     val configFile = getConfigFile(assetPath)
     val context: Context = mainActivity.applicationContext
@@ -122,6 +121,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
                  * This requires "account_mode" : "SINGLE" in the config json file.
                  *
                  */
+                Log.d(TAG, "INITIALIZED")
                 mSingleAccountApp = application
               }
 
@@ -132,20 +132,33 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
   }
 
   private fun acquireTokenInteractively(scopes: Array<String>, authority: String, result: Result) {
+    if (mSingleAccountApp == null) {
+      result.error("MsalClientException", "Account not initialized", null)
+    }
+
     return mSingleAccountApp!!.signIn(mainActivity, "", scopes, getAuthInteractiveCallback(result))
   }
 
   private fun acquireTokenSilently(scopes: Array<String>, authority: String, result: Result) {
+    if (mSingleAccountApp == null) {
+      result.error("MsalClientException", "Account not initialized", null)
+    }
+
     return mSingleAccountApp!!.acquireTokenSilentAsync(scopes, authority, getAuthSilentCallback(result))
   }
 
   private fun signOut(result: Result){
+    if (mSingleAccountApp == null) {
+      result.error("MsalClientException", "Account not initialized", null)
+    }
+
     return mSingleAccountApp!!.signOut(object : ISingleAccountPublicClientApplication.SignOutCallback {
       override fun onSignOut() {
         result.success("SUCCESS")
       }
 
       override fun onError(exception: MsalException) {
+        Log.e(TAG, exception.message)
         result.error("ERROR", exception.errorCode, null)
       }
     })
@@ -227,6 +240,10 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
   }
 
   private fun loadAccount(result: Result) {
+    if (mSingleAccountApp == null) {
+      result.error("MsalClientException", "Account not initialized", null)
+    }
+
     return mSingleAccountApp!!.getCurrentAccountAsync(object :
             ISingleAccountPublicClientApplication.CurrentAccountCallback {
       override fun onAccountLoaded(activeAccount: IAccount?) {
@@ -239,6 +256,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
         if (currentAccount == null) {
           // Perform a cleanup task as the signed-in account changed.
           Log.d(TAG, "No Account")
+          result.success(null)
         }
       }
 

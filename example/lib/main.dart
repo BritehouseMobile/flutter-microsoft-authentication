@@ -33,6 +33,7 @@ class _MyAppState extends State<MyApp> {
       kScopes: ["User.Read", "User.ReadBasic.All"],
       androidConfigAssetPath: "assets/android_auth_config.json"
     );
+    print('INITIALIZED FMA');
   }
 
   Future<void> _acquireTokenInteractively() async {

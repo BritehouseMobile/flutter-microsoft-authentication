@@ -19,6 +19,9 @@ class FlutterMicrosoftAuthentication {
     _kAuthority = kAuthority;
     _kScopes = kScopes;
     _androidConfigAssetPath = androidConfigAssetPath;
+
+    if (Platform.isAndroid)
+      _channel.invokeMethod("init", _createMethodcallArguments());
   }
 
   Map<String, dynamic> _createMethodcallArguments() {
