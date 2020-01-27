@@ -1,7 +1,6 @@
 name: flutter_microsoft_authentication
-description: Flutter Wrapper for Microsoft Authentication Library
-version: 0.0.4
-author: Gerrit van Huyssteen <gerrit.vanhuyssteen@britehouse.co.za>
+description: Flutter Wrapper for Microsoft Authentication Library to enable SSO across Android and iOS.
+version: 0.1.0
 homepage: https://github.com/BritehouseMobile/flutter-microsoft-authentication
 
 environment:
