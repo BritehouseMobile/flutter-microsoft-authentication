@@ -1,3 +1,7 @@
+## 0.1.1
+
+* Upgraded Android dependancy com.microsoft.identity.client:msal to latest version
+
 ## 0.1.0
 
 * Fixed issue on error where plugin would not initialise properly on first method call
