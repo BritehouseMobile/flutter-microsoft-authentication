@@ -67,7 +67,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       "acquireTokenSilently" -> acquireTokenSilently(scopes, authority, result)
       "loadAccount" -> loadAccount(result)
       "signOut" -> signOut(result)
-      "init" -> initPlugin(configPath)
+      "init" -> initPlugin(configPath, result)
       else -> result.notImplemented()
     }
 
@@ -103,11 +103,11 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
     }
   }
 
-  private fun initPlugin(assetPath: String) {
-    createSingleAccountPublicClientApplication(assetPath)
+  private fun initPlugin(assetPath: String, result: Result) {
+    createSingleAccountPublicClientApplication(assetPath, result)
   }
 
-  private fun createSingleAccountPublicClientApplication(assetPath: String) {
+  private fun createSingleAccountPublicClientApplication(assetPath: String, result: Result) {
     val configFile = getConfigFile(assetPath)
     val context: Context = mainActivity.applicationContext
 
@@ -123,10 +123,12 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
                  */
                 Log.d(TAG, "INITIALIZED")
                 mSingleAccountApp = application
+                result.success(null)
               }
 
               override fun onError(exception: MsalException) {
                 Log.e(TAG, exception.message)
+                result.error(exception.errorCode, exception.message, null)
               }
             })
   }
