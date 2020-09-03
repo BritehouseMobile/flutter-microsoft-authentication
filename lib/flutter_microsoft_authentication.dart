@@ -9,6 +9,7 @@ class FlutterMicrosoftAuthentication {
   List<String> _kScopes;
   String _kClientID, _kAuthority;
   String _androidConfigAssetPath;
+  Future initialFuture;
 
   FlutterMicrosoftAuthentication(
       {String kClientID,
@@ -20,8 +21,22 @@ class FlutterMicrosoftAuthentication {
     _kScopes = kScopes;
     _androidConfigAssetPath = androidConfigAssetPath;
 
-    if (Platform.isAndroid)
-      _channel.invokeMethod("init", _createMethodcallArguments());
+    if (Platform.isAndroid) {
+      initialFuture = _channel.invokeMethod("init", _createMethodcallArguments());
+    }
+  }
+
+  /// Make sure the plugin has been ready.
+  ///
+  /// To prevent potential problem,
+  /// you should call this after instantiate [FlutterMicrosoftAuthentication].
+  ///
+  /// ``dart
+  /// final fma = FlutterMicrosoftAuthentication();
+  /// await fma.ensureInitialized();
+  /// ```
+  Future ensureInitialized () {
+    return Future.value(initialFuture);
   }
 
   Map<String, dynamic> _createMethodcallArguments() {
