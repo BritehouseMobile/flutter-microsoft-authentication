@@ -38,29 +38,10 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
 
   override fun onMethodCall(call: MethodCall, result: Result) {
 
-    val scopesArg : ArrayList<String>? = call.argument("kScopes")
-    val scopes: Array<String>? = scopesArg?.toTypedArray()
-    val authority: String? = call.argument("kAuthority")
-    val configPath: String? = call.argument("configPath")
-
-
-    if (configPath == null) {
-      Log.d(TAG, "no config")
-      result.error("NO_CONFIG","Call must include a config file path", null)
-      return
-    }
-
-    if(scopes == null){
-      Log.d(TAG, "no scope")
-      result.error("NO_SCOPE","Call must include a scope", null)
-      return
-    }
-
-    if(authority == null){
-      Log.d(TAG,"error no authority")
-      result.error("NO_AUTHORITY", "Call must include an authority", null)
-      return
-    }
+    val scopesArg : ArrayList<String> = call.argument("scopes")!!
+    val scopes: Array<String> = scopesArg?.toTypedArray()!!
+    val authority: String = call.argument("authority")!!
+    val configPath: String = call.argument("configPath")!!
 
     when(call.method){
       "acquireTokenInteractively" -> acquireTokenInteractively(scopes, authority, result)
@@ -126,7 +107,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
               }
 
               override fun onError(exception: MsalException) {
-                Log.e(TAG, exception.message)
+                Log.e(TAG, exception.message!!)
               }
             })
   }
@@ -158,7 +139,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       }
 
       override fun onError(exception: MsalException) {
-        Log.e(TAG, exception.message)
+        Log.e(TAG, exception.message!!)
         result.error("ERROR", exception.errorCode, null)
       }
     })
@@ -261,7 +242,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       }
 
       override fun onError(exception: MsalException) {
-        Log.e(TAG, exception.message)
+        Log.e(TAG, exception.message!!)
         result.error("MsalException", exception.message, null)
       }
     })
