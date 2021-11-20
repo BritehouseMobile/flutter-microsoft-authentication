@@ -18,7 +18,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import io.flutter.embedding.engine.plugins
 
-class FlutterMicrosoftAuthenticationPlugin: FlutterPlugin, MethodCallHandler {
+class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler, FlutterPlugin  {
   private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
 
   companion object {
