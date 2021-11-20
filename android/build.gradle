@@ -2,14 +2,17 @@ group 'za.co.britehouse.flutter_microsoft_authentication'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.3.60'
+    ext.kotlin_version = '1.5.10'
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+        }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.android.tools.build:gradle:4.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
@@ -19,6 +22,9 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+        }
     }
 }
 
@@ -33,7 +39,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 19
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -42,15 +48,15 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.9.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
     if (findProject(':msal') != null) {
         // For developer team only.
         localImplementation project(':msal')
-        externalImplementation 'com.microsoft.identity.client:msal:1.4.0'
+        externalImplementation 'com.microsoft.identity.client:msal:2.0.+'
     }
     else {
         // Downloads and Builds MSAL from maven central.
-        implementation 'com.microsoft.identity.client:msal:1.4.0'
+        implementation 'com.microsoft.identity.client:msal:2.0.+'
     }
 }
