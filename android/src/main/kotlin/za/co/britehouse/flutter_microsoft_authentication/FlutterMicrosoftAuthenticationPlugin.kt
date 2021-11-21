@@ -8,6 +8,9 @@ import com.microsoft.identity.client.exception.MsalClientException
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.client.exception.MsalServiceException
 import com.microsoft.identity.client.exception.MsalUiRequiredException
+import androidx.annotation.NonNull
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -16,10 +19,19 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import io.flutter.embedding.engine.plugins.FlutterPlugin
 
 class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler, FlutterPlugin  {
   private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
+  private lateinit var channel : MethodChannel
+  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_microsoft_authentication")
+    channel.setMethodCallHandler(this)
+    Factory.setup(this, flutterPluginBinding.binaryMessenger)
+  }
+
+  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    channel.setMethodCallHandler(null)
+  }
 
   companion object {
 
