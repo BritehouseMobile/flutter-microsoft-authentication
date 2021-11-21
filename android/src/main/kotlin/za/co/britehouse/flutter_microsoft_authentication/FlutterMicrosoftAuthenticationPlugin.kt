@@ -126,7 +126,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
               }
 
               override fun onError(exception: MsalException) {
-                Log.e(TAG, exception.message)
+                //Log.e(TAG, exception.message)
               }
             })
   }
@@ -158,7 +158,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       }
 
       override fun onError(exception: MsalException) {
-        Log.e(TAG, exception.message)
+        //Log.e(TAG, exception.message)
         result.error("ERROR", exception.errorCode, null)
       }
     })
@@ -261,7 +261,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
       }
 
       override fun onError(exception: MsalException) {
-        Log.e(TAG, exception.message)
+        //Log.e(TAG, exception.message)
         result.error("MsalException", exception.message, null)
       }
     })
