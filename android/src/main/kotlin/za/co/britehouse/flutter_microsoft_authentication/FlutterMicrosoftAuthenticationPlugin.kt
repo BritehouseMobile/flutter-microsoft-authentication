@@ -8,9 +8,6 @@ import com.microsoft.identity.client.exception.MsalClientException
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.client.exception.MsalServiceException
 import com.microsoft.identity.client.exception.MsalUiRequiredException
-import androidx.annotation.NonNull
-import io.flutter.embedding.engine.plugins.FlutterPlugin;
-import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -20,17 +17,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler, FlutterPlugin  {
-  private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
-  private lateinit var channel : MethodChannel
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_microsoft_authentication")
-    channel.setMethodCallHandler(this)
-  }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-  }
+class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
+  private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
 
   companion object {
 
@@ -49,29 +38,10 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler, FlutterPlugin  {
 
   override fun onMethodCall(call: MethodCall, result: Result) {
 
-    val scopesArg : ArrayList<String>? = call.argument("kScopes")
-    val scopes: Array<String>? = scopesArg?.toTypedArray()
-    val authority: String? = call.argument("kAuthority")
-    val configPath: String? = call.argument("configPath")
-
-
-    if (configPath == null) {
-      Log.d(TAG, "no config")
-      result.error("NO_CONFIG","Call must include a config file path", null)
-      return
-    }
-
-    if(scopes == null){
-      Log.d(TAG, "no scope")
-      result.error("NO_SCOPE","Call must include a scope", null)
-      return
-    }
-
-    if(authority == null){
-      Log.d(TAG,"error no authority")
-      result.error("NO_AUTHORITY", "Call must include an authority", null)
-      return
-    }
+    val scopesArg : ArrayList<String> = call.argument("scopes")!!
+    val scopes: Array<String> = scopesArg?.toTypedArray()!!
+    val authority: String = call.argument("authority")!!
+    val configPath: String = call.argument("configPath")!!
 
     when(call.method){
       "acquireTokenInteractively" -> acquireTokenInteractively(scopes, authority, result)
@@ -137,7 +107,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler, FlutterPlugin  {
               }
 
               override fun onError(exception: MsalException) {
-                //Log.e(TAG, exception.message)
+                Log.e(TAG, exception.message!!)
               }
             })
   }
@@ -169,7 +139,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler, FlutterPlugin  {
       }
 
       override fun onError(exception: MsalException) {
-        //Log.e(TAG, exception.message)
+        Log.e(TAG, exception.message!!)
         result.error("ERROR", exception.errorCode, null)
       }
     })
@@ -272,7 +242,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler, FlutterPlugin  {
       }
 
       override fun onError(exception: MsalException) {
-        //Log.e(TAG, exception.message)
+        Log.e(TAG, exception.message!!)
         result.error("MsalException", exception.message, null)
       }
     })
