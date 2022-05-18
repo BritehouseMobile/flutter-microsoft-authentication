@@ -31,7 +31,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "flutter_microsoft_authentication")
       channel.setMethodCallHandler(FlutterMicrosoftAuthenticationPlugin())
-      mainActivity = registrar!!.activity()
+      mainActivity = if (registrar != null) registrar.activity() else throw NullPointerException("Expression 'registrar' must not be null")
       mRegistrar = registrar
     }
   }
