@@ -23,7 +23,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
 
   companion object {
 
-    lateinit var mainActivity: Activity
+    var mainActivity: Activity = null
     lateinit var mRegistrar: Registrar
     private const val TAG = "FMAuthPlugin"
 
@@ -31,7 +31,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "flutter_microsoft_authentication")
       channel.setMethodCallHandler(FlutterMicrosoftAuthenticationPlugin())
-      mainActivity = if (registrar.activity() != null) registrar.activity() else throw NullPointerException("Expression 'registrar.activity()' must not be null")
+      mainActivity = registrar.activity()
       mRegistrar = registrar
     }
   }
