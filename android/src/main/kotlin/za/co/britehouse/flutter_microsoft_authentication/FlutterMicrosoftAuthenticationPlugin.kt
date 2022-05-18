@@ -23,7 +23,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
 
   companion object {
 
-    lateinit var mainActivity: Activity
+    lateinit var mainActivity: Activity?
     lateinit var mRegistrar: Registrar
     private const val TAG = "FMAuthPlugin"
 
