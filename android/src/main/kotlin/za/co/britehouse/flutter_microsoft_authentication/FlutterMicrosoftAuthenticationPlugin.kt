@@ -31,7 +31,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "flutter_microsoft_authentication")
       channel.setMethodCallHandler(FlutterMicrosoftAuthenticationPlugin())
-      mainActivity = registrar.activity()
+      mainActivity = registrar.activity()!!
       mRegistrar = registrar
     }
   }
