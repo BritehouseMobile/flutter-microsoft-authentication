@@ -23,7 +23,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
 
   companion object {
 
-    var mainActivity: Activity?
+    lateinit var mainActivity: Activity
     lateinit var mRegistrar: Registrar
     private const val TAG = "FMAuthPlugin"
 
@@ -31,7 +31,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "flutter_microsoft_authentication")
       channel.setMethodCallHandler(FlutterMicrosoftAuthenticationPlugin())
-      mainActivity = registrar?.activity()
+      mainActivity = registrar!!.activity()
       mRegistrar = registrar
     }
   }
@@ -109,7 +109,7 @@ class FlutterMicrosoftAuthenticationPlugin: MethodCallHandler {
 
   private fun createSingleAccountPublicClientApplication(assetPath: String) {
     val configFile = getConfigFile(assetPath)
-    val context: Context = mainActivity.applicationContext
+    val context: Context = mainActivity?.applicationContext
 
     PublicClientApplication.createSingleAccountPublicClientApplication(
             context,
