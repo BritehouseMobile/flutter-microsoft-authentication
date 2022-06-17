@@ -6,15 +6,15 @@ class FlutterMicrosoftAuthentication {
   static const MethodChannel _channel =
       const MethodChannel('flutter_microsoft_authentication');
 
-  List<String> _kScopes;
-  String _kClientID, _kAuthority;
-  String _androidConfigAssetPath;
+  List<String> _kScopes = [];
+  String _kClientID = "", _kAuthority = "";
+  String _androidConfigAssetPath = "";
 
   FlutterMicrosoftAuthentication(
-      {String kClientID,
-      String kAuthority,
-      List<String> kScopes,
-      String androidConfigAssetPath}) {
+      {required String kClientID,
+      required String kAuthority,
+      required List<String> kScopes,
+      required String androidConfigAssetPath}) {
     _kClientID = kClientID;
     _kAuthority = kAuthority;
     _kScopes = kScopes;
