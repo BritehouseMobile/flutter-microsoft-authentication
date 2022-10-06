@@ -16,7 +16,7 @@ https://github.com/AzureAD/microsoft-authentication-library-for-objc
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'MSAL', '~> 1.0.3'
+  s.dependency 'MSAL', '~> 1.2.4'
   s.ios.deployment_target = '11.0'
 end
 
