@@ -57,10 +57,10 @@ dependencies {
     if (findProject(':msal') != null) {
         // For developer team only.
         localImplementation project(':msal')
-        externalImplementation 'com.microsoft.identity.client:msal:+'
+        externalImplementation 'com.microsoft.identity.client:msal:3.0.+'
     }
     else {
         // Downloads and Builds MSAL from maven central.
-        implementation 'com.microsoft.identity.client:msal:+'
+        implementation 'com.microsoft.identity.client:msal:3.0.+'
     }
 }
