@@ -43,7 +43,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 26
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -57,10 +57,10 @@ dependencies {
     if (findProject(':msal') != null) {
         // For developer team only.
         localImplementation project(':msal')
-        externalImplementation 'com.microsoft.identity.client:msal:3.0.+'
+        externalImplementation 'com.microsoft.identity.client:msal:+'
     }
     else {
         // Downloads and Builds MSAL from maven central.
-        implementation 'com.microsoft.identity.client:msal:3.0.+'
+        implementation 'com.microsoft.identity.client:msal:+'
     }
 }
