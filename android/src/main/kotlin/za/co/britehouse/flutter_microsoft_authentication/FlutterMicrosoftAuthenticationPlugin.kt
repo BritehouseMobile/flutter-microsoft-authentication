@@ -182,7 +182,7 @@ class FlutterMicrosoftAuthenticationPlugin : FlutterPlugin, ActivityAware, Metho
 
         val parameters = AcquireTokenSilentParameters.Builder()
             .withScopes(scopes.toList())
-            .fromAuthority(authority)
+//            .fromAuthority(authority)
             .withCallback(getAuthSilentCallback(result))
             .build()
 
